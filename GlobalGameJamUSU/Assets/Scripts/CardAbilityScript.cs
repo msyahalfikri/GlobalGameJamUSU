@@ -7,7 +7,7 @@ public class CardAbilityScript : MonoBehaviour
     private Card card;
     public int attackValue;
     public int defenseValue;
-    public bool absoluteDefense;
+    public int multiplier;
     public static BattleMechanicScript BattleMechanicScriptInstance;
     private void Start()
     {
@@ -24,19 +24,19 @@ public class CardAbilityScript : MonoBehaviour
     {
         if (card.cardType == CardType.Attack)
         {
-            //DealDamage to enemy using event
-            BattleMechanicScriptInstance.EnemyTakeDamage(attackValue);
+            if (card.gm.turnMechanic.currentTurn == PlayerTurn.EnemyAI)
+            {
+
+            }
+            else if (card.gm.turnMechanic.currentTurn == PlayerTurn.Player)
+            {
+                //DealDamage to enemy using event
+                BattleMechanicScriptInstance.EnemyTakeDamage(attackValue, defenseValue, multiplier);
+            }
+
         }
         else if (card.cardType == CardType.Defense)
         {
-            if (absoluteDefense == true)
-            {
-
-            }
-            else
-            {
-
-            }
 
         }
         else if (card.cardType == CardType.Effect)

@@ -21,7 +21,7 @@ public class Card : MonoBehaviour
 	public bool hasBeenPlayed;
 	public int handIndex;
 
-	GameManager gm;
+	[HideInInspector] public GameManager gm;
 
 	private Animator anim;
 	private Animator camAnim;

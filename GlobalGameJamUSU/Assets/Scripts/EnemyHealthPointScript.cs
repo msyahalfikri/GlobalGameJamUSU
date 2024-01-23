@@ -33,9 +33,10 @@ public class EnemyHealthPointScript : MonoBehaviour
     }
 
     // Function to take damage
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage, int reduction, int multiplier)
     {
-        currentHealth += damage;
+        float finalDamage = (damage - reduction) * multiplier;
+        currentHealth += finalDamage;
 
         // // Trigger the damage taken event
         // DamageTakenEvent?.Invoke(damage);
