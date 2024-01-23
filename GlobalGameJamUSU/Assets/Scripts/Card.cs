@@ -30,59 +30,69 @@ public class Card : MonoBehaviour
 	public GameObject hollowCircle;
 
 	private bool isAnimating = false;
+	private Vector3 originalScale;
 
 	public static Card selectedCard;
 
 	public CardType cardType;
 	public JokeType jokeType;
+	private CardAbilityScript cardAbility;
 
-	public int attackValue;
-	public int defenseValue;
+	// Event triggered when player played a card
+	// public delegate void OnCardPlayed;
+	// public event OnCardPlayed OnCardPlayedEvent;
 
 	private void Start()
 	{
 		gm = FindObjectOfType<GameManager>();
 		anim = GetComponent<Animator>();
 		camAnim = Camera.main.GetComponent<Animator>();
+		cardAbility = GetComponent<CardAbilityScript>();
+		originalScale = transform.localScale;
 	}
 
 	private void OnMouseDown()
 	{
-		if (!hasBeenPlayed && !isAnimating)
+		if (gm.turnMechanic.currentTurn == PlayerTurn.Player)
 		{
+			if (!hasBeenPlayed && !isAnimating)
+			{
 
-			selectedCard = this;
+				selectedCard = this;
 
-			isAnimating = true;
+				isAnimating = true;
 
-			GameObject clickEffect = Instantiate(hollowCircle, transform.position, Quaternion.identity);
-			Destroy(clickEffect, 1f);
+				GameObject clickEffect = Instantiate(hollowCircle, transform.position, Quaternion.identity);
+				Destroy(clickEffect, 1f);
 
-			camAnim.SetTrigger("shake");
-			anim.SetTrigger("move");
+				camAnim.SetTrigger("shake");
+				anim.SetTrigger("move");
 
-			StartCoroutine(MoveAndScaleUp());
-			hasBeenPlayed = true;
-			gm.availableCardSlots[handIndex] = true;
-			Invoke("RemovePlayedCardFromHand", 2f);
+				StartCoroutine(MoveAndScaleUp());
+				hasBeenPlayed = true;
+				gm.availableCardSlots[handIndex] = true;
+				cardAbility.UseCardAbility();
+				Invoke("RemovePlayedCardFromHand", 2f);
+				gm.SwitchTurnToOpponentEvent();
+			}
 		}
 	}
 
 	void RemovePlayedCardFromHand()
 	{
+		GameObject removedEffect = Instantiate(effect, transform.position, Quaternion.identity);
 		gm.discardPile.Add(this);
 		gameObject.SetActive(false);
-		GameObject removedEffect = Instantiate(effect, transform.position, Quaternion.identity);
 	}
 
 	private IEnumerator MoveAndScaleUp()
 	{
-		float moveDistance = 4f;  // Adjust the distance to move
+		float moveDistance = 2f;  // Adjust the distance to move
 		Vector3 originalPosition = transform.position;
 		Vector3 targetPosition = originalPosition + Vector3.up * moveDistance;
 
 		Vector3 originalScale = transform.localScale;
-		Vector3 targetScale = originalScale * 1.3f; // Adjust the scaling factor
+		Vector3 targetScale = originalScale * 1.35f; // Adjust the scaling factor
 
 		float duration = 0.1f; // Adjust the duration of the animation
 
@@ -103,8 +113,16 @@ public class Card : MonoBehaviour
 		isAnimating = false;
 	}
 
-	void UseCardAbility()
+	private void OnMouseOver()
 	{
-		//CARD ABILITY BASED ON THE TYPE
+		// Scale up or apply any other hover effect
+		transform.localScale = originalScale * 1.3f;
 	}
+
+	private void OnMouseExit()
+	{
+		// Reset the scale on hover exit
+		transform.localScale = originalScale;
+	}
+
 }

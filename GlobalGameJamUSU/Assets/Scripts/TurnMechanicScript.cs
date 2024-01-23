@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerTurn
+{
+    Player,
+    EnemyAI
+}
 public class TurnMechanicScript : MonoBehaviour
 {
-    public enum PlayerTurn
-    {
-        Player,
-        EnemyAI
-    }
-
-    private PlayerTurn currentTurn;
+    public PlayerTurn currentTurn;
+    public GameManager gm;
 
     private void Start()
     {
@@ -23,16 +23,10 @@ public class TurnMechanicScript : MonoBehaviour
 
     private void Update()
     {
-        // Check for end-of-turn conditions (e.g., if the current player has no more actions)
-
-        // For demonstration purposes, switch turns when the space bar is pressed
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SwitchTurns();
-        }
+        Debug.Log(currentTurn);
     }
 
-    private void SwitchTurns()
+    public void SwitchTurns()
     {
         // Switch to the next player's turn
         currentTurn = (currentTurn == PlayerTurn.Player) ? PlayerTurn.EnemyAI : PlayerTurn.Player;
@@ -47,4 +41,15 @@ public class TurnMechanicScript : MonoBehaviour
 
         // Add logic for the start of a new turn, such as drawing cards, resetting actions, etc.
     }
+
+    private void OnEnable()
+    {
+        gm.SwitchTurnsEvent += SwitchTurns;
+    }
+
+    private void OnDisable()
+    {
+        gm.SwitchTurnsEvent -= SwitchTurns;
+    }
+
 }

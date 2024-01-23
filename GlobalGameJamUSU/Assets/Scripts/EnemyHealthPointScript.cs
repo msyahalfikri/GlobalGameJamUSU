@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPointScript : MonoBehaviour
+public class EnemyHealthPointScript : MonoBehaviour
 {
-    public float maxHealth = 100f; // Adjust the maximum health value as needed
-    private float currentHealth;
+    public float maxHealth = 0f; // Adjust the maximum health value as needed
+    public float currentHealth;
 
-    // Event triggered when the object takes damage
-    public delegate void OnDamageTaken(float damage);
-    public event OnDamageTaken DamageTakenEvent;
+    // // Event triggered when the object takes damage
+    // public delegate void OnDamageTaken(float damage);
+    // public event OnDamageTaken DamageTakenEvent;
 
     // Event triggered when the object dies
     public delegate void OnDeath();
@@ -35,13 +35,13 @@ public class HealthPointScript : MonoBehaviour
     // Function to take damage
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth += damage;
 
-        // Trigger the damage taken event
-        DamageTakenEvent?.Invoke(damage);
+        // // Trigger the damage taken event
+        // DamageTakenEvent?.Invoke(damage);
 
         // Check if the health has reached zero
-        if (currentHealth <= 0)
+        if (currentHealth >= 30f)
         {
             Die();
         }
@@ -59,6 +59,6 @@ public class HealthPointScript : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(currentHealth);
+        // Debug.Log(currentHealth);
     }
 }
