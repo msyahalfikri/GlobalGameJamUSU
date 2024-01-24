@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class GameManager : MonoBehaviour
 	public TextMeshProUGUI deckSizeText;
 	public TextMeshProUGUI turnText;
 	public TextMeshProUGUI roundText;
+	public GameObject endGameScreen;
+
+	public EnemyHealthPointScript enemyHealthPoint;
+	public PlayerHealthPointScript playerHealthPoint;
 
 	public Button DrawButton;
 	public Button EndTurnButton;
@@ -80,15 +85,19 @@ public class GameManager : MonoBehaviour
 
 	public void DrawSingleOrMultipleCards(int numCardsToDraw)
 	{
-		if (roundCounter == 1)
+		if (turnMechanic.currentTurn == PlayerTurn.Player)
 		{
-			DrawCard(3);
+			if (roundCounter == 1)
+			{
+				DrawCard(3);
+			}
+			else
+			{
+				DrawCard(numCardsToDraw);
+				SwitchTurnToOpponentEvent();
+			}
 		}
-		else
-		{
-			DrawCard(numCardsToDraw);
-			SwitchTurnToOpponentEvent();
-		}
+		playerCardDefenseValue = 0;
 	}
 
 	private void Update()
@@ -105,7 +114,7 @@ public class GameManager : MonoBehaviour
 
 		if (turnMechanic.currentTurn == PlayerTurn.EnemyAI)
 		{
-			turnText.text = ("Membandingkan...");
+			turnText.text = ("Hasilnya...");
 			DrawButton.interactable = false;
 			EndTurnButton.interactable = false;
 		}
@@ -120,7 +129,7 @@ public class GameManager : MonoBehaviour
 		bool allSlotsOccupied = Array.TrueForAll(availableCardSlots, slot => !slot);
 		DrawButton.interactable = !allSlotsOccupied;
 
-		Debug.Log("Enemy Attack: " + enemyCardAttackValue + " || + Enemy Defense Value: " + enemyCardDefenseValue);
+		// Debug.Log("Enemy Attack: " + enemyCardAttackValue + " || + Enemy Defense Value: " + enemyCardDefenseValue);
 	}
 
 	public void SwitchTurnToOpponentEvent()
@@ -130,5 +139,33 @@ public class GameManager : MonoBehaviour
 		{
 			roundCounter++;
 		}
+	}
+
+	private void OnEnable()
+	{
+		// Subscribe to the DeathEvent
+		enemyHealthPoint.EnemyLoseEvent += HandleEnemyLose;
+		playerHealthPoint.PlayerLoseEvent += HandlePlayerLose;
+	}
+
+	private void OnDisable()
+	{
+		// Unsubscribe from the DeathEvent when the script is disabled
+		enemyHealthPoint.EnemyLoseEvent -= HandleEnemyLose;
+		playerHealthPoint.PlayerLoseEvent -= HandlePlayerLose;
+	}
+	public void HandleEnemyLose()
+	{
+		endGameScreen.SetActive(true);
+	}
+
+	public void HandlePlayerLose()
+	{
+		endGameScreen.SetActive(true);
+	}
+
+	public void BackToMainMenuScene(string sceneName)
+	{
+		SceneManager.LoadScene(sceneName);
 	}
 }

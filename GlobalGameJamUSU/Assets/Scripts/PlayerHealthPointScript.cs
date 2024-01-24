@@ -8,8 +8,8 @@ public class PlayerHealthPointScript : MonoBehaviour
     public float currentHealth;
 
     // Event triggered when the object dies
-    public delegate void OnDeath();
-    public event OnDeath DeathEvent;
+    public delegate void OnPlayerLose();
+    public event OnPlayerLose PlayerLoseEvent;
     public BattleMechanicScript BattleMechanicScriptInstance;
 
     // Start is called before the first frame update
@@ -31,7 +31,12 @@ public class PlayerHealthPointScript : MonoBehaviour
     // Function to take damage
     public void TakeDamage(int damage, int reduction, int multiplier, int otherEffect)
     {
-        float finalDamage = (damage - reduction) * multiplier;
+        float finalDamage = (damage + reduction) * multiplier;
+        Debug.Log("Damage to Player: (" + damage + " + " + reduction + ") * " + multiplier + " = " + finalDamage);
+        if (finalDamage < 0 || finalDamage > 30)
+        {
+            finalDamage = 0;
+        }
         currentHealth += finalDamage;
 
         // Check if the health has reached zero
@@ -45,7 +50,7 @@ public class PlayerHealthPointScript : MonoBehaviour
     private void Die()
     {
         // Trigger the death event
-        DeathEvent?.Invoke();
+        PlayerLoseEvent?.Invoke();
     }
     private void Update()
     {

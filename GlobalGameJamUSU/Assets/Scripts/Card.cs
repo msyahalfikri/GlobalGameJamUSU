@@ -78,15 +78,23 @@ public class Card : MonoBehaviour
 				hasBeenPlayed = true;
 				gm.availableCardSlots[handIndex] = true;
 				PassPlayerCard(selectedCard.cardType, selectedCard.jokeType, selectedCard.attackValue, selectedCard.defenseValue, selectedCard.cardID, selectedCard.multiplier);
-				cardAbility.UseCardAbility();
-				Invoke("RemovePlayedCardFromHand", 2f);
+				StartCoroutine(RemovePlayedCardAndUseChosenCardAbility());
 				gm.SwitchTurnToOpponentEvent();
 			}
 
 		}
 	}
 
-	void RemovePlayedCardFromHand()
+	private IEnumerator RemovePlayedCardAndUseChosenCardAbility()
+	{
+		yield return new WaitForSeconds(7f);
+		cardAbility.UsePlayerCardAbility();
+		RemovePlayedCardFromHand();
+		Debug.Log("Card Ability Used");
+		Debug.Log("Player Card: " + selectedCard.cardType + ", " + selectedCard.jokeType + ", " + selectedCard.attackValue + ", " + selectedCard.defenseValue + ", " + selectedCard.cardID + ", " + selectedCard.multiplier);
+
+	}
+	public void RemovePlayedCardFromHand()
 	{
 		GameObject removedEffect = Instantiate(effect, transform.position, Quaternion.identity);
 		gm.discardPile.Add(this);

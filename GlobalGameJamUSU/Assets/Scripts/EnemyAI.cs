@@ -5,30 +5,13 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     public TurnMechanicScript turnMechanic;
+    private EnemyUIScript enemyUIScript;
     public GameManager gm;
     public int cardsOnEnemyHand = 3;
     private bool hasMadeAMove = false;
     public CardAbilityScript cardAbility;
 
-    // public int attack_F1 = 1;
-    // public int attack_F2 = 1;
-    // public int attack_F3 = 1;
-    // public int attack_V1 = 1;
-    // public int attack_V2 = 1;
-    // public int attack_V3 = 1;
-    // public int Defense_F1 = 1;
-    // public int Defense_F2 = 1;
-    // public int Defense_F3 = 1;
-    // public int Defense_V1 = 1;
-    // public int Defense_V2 = 1;
-    // public int Defense_V3 = 1;
-    // public int Effect1 = 1;
-    // public int Effect2 = 1;
-
-
-    //0 = Attack, 1 = Defense, 2 = Effect;
     [HideInInspector] public CardType cardType;
-    //0 = Physical, 1 = Verbal
     [HideInInspector] public JokeType cardJokeType;
     public int cardAttackValue;
     public int cardDefenseValue;
@@ -38,7 +21,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        enemyUIScript = GetComponent<EnemyUIScript>();
     }
 
     void Update()
@@ -52,7 +35,7 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator EnemyMakingAMove()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1f);
         int randomMove = UnityEngine.Random.Range(0, 3);
 
         if (randomMove == 0)
@@ -78,7 +61,12 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
+        yield return new WaitForSeconds(3f);
+        enemyUIScript.SwapEnemyCardImage();
+        yield return new WaitForSeconds(3f);
+        cardAbility.UseEnemyCardAbility();
         gm.SwitchTurnToOpponentEvent();
+        enemyUIScript.SwapEnemyCardImage();
         hasMadeAMove = false;
     }
 
@@ -256,8 +244,8 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
         PassEnemyCard(cardType, cardJokeType, cardAttackValue, cardDefenseValue, chosenCardID, cardMultiplier);
+        Debug.Log("Enemy Card: " + cardType + ", " + cardJokeType + ", " + cardAttackValue + ", " + cardDefenseValue + ", " + chosenCardID + ", " + cardMultiplier);
         cardsOnEnemyHand--;
-        cardAbility.UseCardAbility();
     }
 
     private void EnemyDrawsACard()

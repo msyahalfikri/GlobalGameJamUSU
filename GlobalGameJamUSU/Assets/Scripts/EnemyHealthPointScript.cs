@@ -12,8 +12,8 @@ public class EnemyHealthPointScript : MonoBehaviour
     // public event OnDamageTaken DamageTakenEvent;
 
     // Event triggered when the object dies
-    public delegate void OnDeath();
-    public event OnDeath DeathEvent;
+    public delegate void OnEnemyLose();
+    public event OnEnemyLose EnemyLoseEvent;
     public BattleMechanicScript BattleMechanicScriptInstance;
 
     // Start is called before the first frame update
@@ -35,21 +35,26 @@ public class EnemyHealthPointScript : MonoBehaviour
     // Function to take damage
     public void TakeDamage(int damage, int reduction, int multiplier, int cardID)
     {
-        float finalDamage = (damage - reduction) * multiplier;
+        float finalDamage = (damage + reduction) * multiplier;
+        Debug.Log("Damage to Enemy: (" + damage + " + " + reduction + ") * " + multiplier + " = " + finalDamage);
+        if (finalDamage < 0)
+        {
+            finalDamage = 0;
+        }
         currentHealth += finalDamage;
 
         // Check if the health has reached zero
         if (currentHealth >= 30f)
         {
-            Die();
+            EnemyLose();
         }
     }
 
     // Function to handle death (can be expanded based on your game logic)
-    private void Die()
+    private void EnemyLose()
     {
         // Trigger the death event
-        DeathEvent?.Invoke();
+        EnemyLoseEvent?.Invoke();
     }
     private void Update()
     {

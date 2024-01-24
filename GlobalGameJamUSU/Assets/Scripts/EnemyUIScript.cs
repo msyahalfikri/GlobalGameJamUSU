@@ -71,7 +71,6 @@ public class EnemyUIScript : MonoBehaviour
     private void Update()
     {
         IncreaseHealthBar();
-        SwapEnemyCardImage();
         SwapEnemySprite();
     }
 }
