@@ -26,18 +26,23 @@ public class GameManager : MonoBehaviour
 	public event Action SwitchTurnsEvent;
 	public TurnMechanicScript turnMechanic;
 
-	public CardType playerChosenCardType;
-	public JokeType playerChosenCardJokeType;
-	public int playerCardAttackValue;
-	public int playerCardDefenseValue;
-	public int playerEffectCardEffect;
+	[HideInInspector] public CardType playerChosenCardType;
+	[HideInInspector] public JokeType playerChosenCardJokeType;
+	[HideInInspector] public int playerCardAttackValue;
+	[HideInInspector] public int playerCardDefenseValue;
+	[HideInInspector] public int playerEffectCardEffect;
+	[HideInInspector] public int playerChosenCardID;
+	[HideInInspector] public int playerMultiplier;
 
 
-	public CardType enemyChosenCardType;
-	public JokeType enemyChosenCardJokeType;
-	public int enemyCardAttackValue;
-	public int enemyCardDefenseValue;
-	public int enemyEffectCardEffect;
+	[HideInInspector] public CardType enemyChosenCardType;
+	[HideInInspector] public JokeType enemyChosenCardJokeType;
+	[HideInInspector] public int enemyCardAttackValue;
+	[HideInInspector] public int enemyCardDefenseValue;
+	[HideInInspector] public int enemyEffectCardEffect;
+	[HideInInspector] public int enemyChosenCardID;
+	[HideInInspector] public int enemyMultiplier;
+
 
 
 	private void Start()
@@ -111,6 +116,11 @@ public class GameManager : MonoBehaviour
 			EndTurnButton.interactable = true;
 		}
 		roundText.text = roundCounter.ToString();
+
+		bool allSlotsOccupied = Array.TrueForAll(availableCardSlots, slot => !slot);
+		DrawButton.interactable = !allSlotsOccupied;
+
+		Debug.Log("Enemy Attack: " + enemyCardAttackValue + " || + Enemy Defense Value: " + enemyCardDefenseValue);
 	}
 
 	public void SwitchTurnToOpponentEvent()

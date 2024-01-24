@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class CardAbilityScript : MonoBehaviour
 {
-    private Card card;
-    public int attackValue;
-    public int defenseValue;
-    public int multiplier;
-    public static BattleMechanicScript BattleMechanicScriptInstance;
+    public BattleMechanicScript BattleMechanicScriptInstance;
+    public GameManager gm;
     private void Start()
     {
-        card = GetComponent<Card>();
-        BattleMechanicScriptInstance = FindObjectOfType<BattleMechanicScript>();
+        BattleMechanicScriptInstance = GetComponent<BattleMechanicScript>();
+        gm = GetComponent<GameManager>();
     }
 
     private void Update()
@@ -22,26 +19,15 @@ public class CardAbilityScript : MonoBehaviour
 
     public void UseCardAbility()
     {
-        if (card.cardType == CardType.Attack)
+        if (gm.turnMechanic.currentTurn == PlayerTurn.EnemyAI)
         {
-            if (card.gm.turnMechanic.currentTurn == PlayerTurn.EnemyAI)
-            {
-
-            }
-            else if (card.gm.turnMechanic.currentTurn == PlayerTurn.Player)
-            {
-                //DealDamage to enemy using event
-                BattleMechanicScriptInstance.EnemyTakeDamage(attackValue, defenseValue, multiplier);
-            }
-
+            BattleMechanicScriptInstance.PlayerTakeDamage(gm.enemyCardAttackValue, gm.playerCardDefenseValue, gm.enemyMultiplier, gm.enemyChosenCardID);
         }
-        else if (card.cardType == CardType.Defense)
+        else if (gm.turnMechanic.currentTurn == PlayerTurn.Player)
         {
-
+            //DealDamage to enemy using event
+            BattleMechanicScriptInstance.EnemyTakeDamage(gm.playerCardAttackValue, gm.enemyCardDefenseValue, gm.playerMultiplier, gm.playerChosenCardID);
         }
-        else if (card.cardType == CardType.Effect)
-        {
 
-        }
     }
 }

@@ -33,13 +33,10 @@ public class EnemyHealthPointScript : MonoBehaviour
     }
 
     // Function to take damage
-    public void TakeDamage(int damage, int reduction, int multiplier)
+    public void TakeDamage(int damage, int reduction, int multiplier, int cardID)
     {
         float finalDamage = (damage - reduction) * multiplier;
         currentHealth += finalDamage;
-
-        // // Trigger the damage taken event
-        // DamageTakenEvent?.Invoke(damage);
 
         // Check if the health has reached zero
         if (currentHealth >= 30f)
@@ -53,10 +50,6 @@ public class EnemyHealthPointScript : MonoBehaviour
     {
         // Trigger the death event
         DeathEvent?.Invoke();
-
-        Debug.Log(gameObject.name + " has been defeated!");
-        // Perform any actions or animations related to the object being defeated
-        Destroy(gameObject); // For simplicity, destroy the object when defeated
     }
     private void Update()
     {

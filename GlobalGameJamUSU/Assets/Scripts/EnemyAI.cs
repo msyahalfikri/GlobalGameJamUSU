@@ -8,6 +8,7 @@ public class EnemyAI : MonoBehaviour
     public GameManager gm;
     public int cardsOnEnemyHand = 3;
     private bool hasMadeAMove = false;
+    public CardAbilityScript cardAbility;
 
     // public int attack_F1 = 1;
     // public int attack_F2 = 1;
@@ -26,14 +27,13 @@ public class EnemyAI : MonoBehaviour
 
 
     //0 = Attack, 1 = Defense, 2 = Effect;
-    public int CardType;
+    [HideInInspector] public CardType cardType;
     //0 = Physical, 1 = Verbal
-    public int CardElement;
-    public int CardAttackValue;
-    public int CardDefenseValue;
-
-
-    public int ChosenCardID;
+    [HideInInspector] public JokeType cardJokeType;
+    public int cardAttackValue;
+    public int cardDefenseValue;
+    public int cardMultiplier;
+    public int chosenCardID;
 
     // Start is called before the first frame update
     void Start()
@@ -88,53 +88,53 @@ public class EnemyAI : MonoBehaviour
         switch (chooseRandom)
         {
             case 0:
-                ChosenCardID = 0;
+                chosenCardID = 0;
                 break;
 
             case 1:
-                ChosenCardID = 1;
+                chosenCardID = 1;
                 break;
 
             case 2:
-                ChosenCardID = 2;
+                chosenCardID = 2;
                 break;
             case 3:
-                ChosenCardID = 3;
+                chosenCardID = 3;
                 break;
             case 4:
-                ChosenCardID = 4;
+                chosenCardID = 4;
                 break;
             case 5:
-                ChosenCardID = 5;
+                chosenCardID = 5;
                 break;
             case 6:
-                ChosenCardID = 6;
+                chosenCardID = 6;
                 break;
             case 7:
-                ChosenCardID = 7;
+                chosenCardID = 7;
                 break;
             case 8:
-                ChosenCardID = 8;
+                chosenCardID = 8;
                 break;
             case 9:
-                ChosenCardID = 9;
+                chosenCardID = 9;
                 break;
             case 10:
-                ChosenCardID = 10;
+                chosenCardID = 10;
                 break;
             case 11:
-                ChosenCardID = 11;
+                chosenCardID = 11;
                 break;
             case 12:
-                ChosenCardID = 12;
+                chosenCardID = 12;
                 break;
 
             case 13:
-                ChosenCardID = 13;
+                chosenCardID = 13;
                 break;
 
             default:
-                ChosenCardID = 0;
+                chosenCardID = 0;
                 break;
         }
     }
@@ -142,94 +142,136 @@ public class EnemyAI : MonoBehaviour
     private void EnemyPlaysACard()
     {
         ChooseRandomCard();
-        switch (ChosenCardID)
+        switch (chosenCardID)
         {
             case 0: //Buat Wajah Lucu
-                CardType = 0;
-                CardElement = 0;
-                CardAttackValue = 2;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Physical;
+                cardAttackValue = 2;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
 
             case 1: //Gelitik Musuh
-                CardType = 0;
-                CardElement = 0;
-                CardAttackValue = 1;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Physical;
+                cardAttackValue = 1;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
 
             case 2://Tunjukin Dank Meme
-                CardType = 0;
-                CardElement = 0;
-                CardAttackValue = 3;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Physical;
+                cardAttackValue = 3;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
             case 3://Putar Rickroll
-                CardType = 0;
-                CardElement = 1;
-                CardAttackValue = 2;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Verbal;
+                cardAttackValue = 2;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
             case 4://Cerita trauma
-                CardType = 0;
-                CardElement = 1;
-                CardAttackValue = 3;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Verbal;
+                cardAttackValue = 3;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
             case 5://Jokes Bapak-Bapak
-                CardType = 0;
-                CardElement = 1;
-                CardAttackValue = 1;
+                cardType = CardType.Attack;
+                cardJokeType = JokeType.Verbal;
+                cardAttackValue = 1;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
             case 6://Pura-pura Tidak melihat
-                CardType = 1;
-                CardElement = 0;
-                CardDefenseValue = -1;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Physical;
+                cardDefenseValue = -1;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 7://Tiba-tiba Bersin
-                CardType = 1;
-                CardElement = 0;
-                CardDefenseValue = -2;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Physical;
+                cardDefenseValue = -2;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 8://Permisi Nelfon
-                CardType = 1;
-                CardElement = 0;
-                CardDefenseValue = -999;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Physical;
+                cardDefenseValue = -999;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 9://Pakai Headphone
-                CardType = 1;
-                CardElement = 1;
-                CardDefenseValue = -2;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Verbal;
+                cardDefenseValue = -2;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 10://Permisi Ke Kamar Mandi
-                CardType = 1;
-                CardElement = 1;
-                CardDefenseValue = -999;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Verbal;
+                cardDefenseValue = -999;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 11://Pura2 Tidak Dengar
-                CardType = 2;
-                CardElement = 1;
-                CardDefenseValue = -1;
+                cardType = CardType.Defense;
+                cardJokeType = JokeType.Verbal;
+                cardDefenseValue = -1;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
             case 12://Tonton Siksa Kubur
-                CardType = 2;
-                //laugh bar sendiri -3;
+                cardType = CardType.Effect;
+                cardJokeType = JokeType.Neutral;
+                cardDefenseValue = 0;
+                cardAttackValue = 0;
+                cardMultiplier = 1;
                 break;
+            //laugh bar sendiri -3;
 
             case 13://Panggil Bantuan Teman
-                CardType = 2;
-                //buff damage x2
+                cardType = CardType.Effect;
+                cardJokeType = JokeType.Neutral;
+                cardDefenseValue = 0;
+                cardAttackValue = 0;
+                cardMultiplier = 2;
                 break;
 
             default:
-                CardType = 0;
-                CardElement = 0;
-                CardAttackValue = 0;
-                CardDefenseValue = 0;
+                cardType = CardType.Effect;
+                cardJokeType = JokeType.Neutral;
+                cardAttackValue = 0;
+                cardDefenseValue = 0;
+                cardMultiplier = 1;
                 break;
         }
+        PassEnemyCard(cardType, cardJokeType, cardAttackValue, cardDefenseValue, chosenCardID, cardMultiplier);
         cardsOnEnemyHand--;
-        Debug.Log("Enemy Play Card: " + CardType + "with element: " + CardElement);
+        cardAbility.UseCardAbility();
     }
 
     private void EnemyDrawsACard()
     {
         cardsOnEnemyHand++;
-        Debug.Log("Enemy Draws a card!");
+    }
+
+    private void PassEnemyCard(CardType _ChosenCardType, JokeType _ChosenCardJokeType, int _CardAttackValue, int _CardDefenseValue, int _ChosenCardID, int _Multiplier)
+    {
+        gm.enemyChosenCardID = _ChosenCardID;
+        gm.enemyChosenCardType = _ChosenCardType;
+        gm.enemyChosenCardJokeType = _ChosenCardJokeType;
+        gm.enemyCardAttackValue = _CardAttackValue;
+        gm.enemyCardDefenseValue = _CardDefenseValue;
+        gm.enemyMultiplier = _Multiplier;
     }
 }

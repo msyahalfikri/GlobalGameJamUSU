@@ -15,6 +15,7 @@ public enum JokeType
 {
 	Physical,
 	Verbal,
+	Neutral,
 }
 public class Card : MonoBehaviour
 {
@@ -36,7 +37,13 @@ public class Card : MonoBehaviour
 
 	public CardType cardType;
 	public JokeType jokeType;
-	private CardAbilityScript cardAbility;
+
+	public int attackValue;
+	public int defenseValue;
+	public int cardID;
+	public int multiplier;
+	public int otherEffect;
+	public CardAbilityScript cardAbility;
 
 	// Event triggered when player played a card
 	// public delegate void OnCardPlayed;
@@ -47,7 +54,6 @@ public class Card : MonoBehaviour
 		gm = FindObjectOfType<GameManager>();
 		anim = GetComponent<Animator>();
 		camAnim = Camera.main.GetComponent<Animator>();
-		cardAbility = GetComponent<CardAbilityScript>();
 		originalScale = transform.localScale;
 	}
 
@@ -71,10 +77,12 @@ public class Card : MonoBehaviour
 				StartCoroutine(MoveAndScaleUp());
 				hasBeenPlayed = true;
 				gm.availableCardSlots[handIndex] = true;
+				PassPlayerCard(selectedCard.cardType, selectedCard.jokeType, selectedCard.attackValue, selectedCard.defenseValue, selectedCard.cardID, selectedCard.multiplier);
 				cardAbility.UseCardAbility();
 				Invoke("RemovePlayedCardFromHand", 2f);
 				gm.SwitchTurnToOpponentEvent();
 			}
+
 		}
 	}
 
@@ -123,6 +131,16 @@ public class Card : MonoBehaviour
 	{
 		// Reset the scale on hover exit
 		transform.localScale = originalScale;
+	}
+
+	private void PassPlayerCard(CardType _ChosenCardType, JokeType _ChosenCardJokeType, int _CardAttackValue, int _CardDefenseValue, int _ChosenCardID, int _Multiplier)
+	{
+		gm.playerChosenCardID = _ChosenCardID;
+		gm.playerChosenCardType = _ChosenCardType;
+		gm.playerChosenCardJokeType = _ChosenCardJokeType;
+		gm.playerCardAttackValue = _CardAttackValue;
+		gm.playerCardDefenseValue = _CardDefenseValue;
+		gm.playerMultiplier = _Multiplier;
 	}
 
 }

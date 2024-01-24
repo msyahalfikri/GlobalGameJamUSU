@@ -20,22 +20,19 @@ public class PlayerHealthPointScript : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleMechanicScriptInstance.EnemyTakeDamageEvent += TakeDamage;
+        BattleMechanicScriptInstance.PlayerTakeDamageEvent += TakeDamage;
     }
 
     private void OnDisable()
     {
-        BattleMechanicScriptInstance.EnemyTakeDamageEvent -= TakeDamage;
+        BattleMechanicScriptInstance.PlayerTakeDamageEvent -= TakeDamage;
     }
 
     // Function to take damage
-    public void TakeDamage(int damage, int reduction, int multiplier)
+    public void TakeDamage(int damage, int reduction, int multiplier, int otherEffect)
     {
         float finalDamage = (damage - reduction) * multiplier;
         currentHealth += finalDamage;
-
-        // // Trigger the damage taken event
-        // DamageTakenEvent?.Invoke(damage);
 
         // Check if the health has reached zero
         if (currentHealth >= 30f)
@@ -49,10 +46,6 @@ public class PlayerHealthPointScript : MonoBehaviour
     {
         // Trigger the death event
         DeathEvent?.Invoke();
-
-        Debug.Log(gameObject.name + " has been defeated!");
-        // Perform any actions or animations related to the object being defeated
-        Destroy(gameObject); // For simplicity, destroy the object when defeated
     }
     private void Update()
     {
